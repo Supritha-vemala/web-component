@@ -20,6 +20,10 @@ var usersSchema = new mongoose_1.default.Schema({
     password: {
         type: String,
         required: true,
+    },
+    bookmarks: {
+        type: [String],
+        default: []
     }
 });
 var usersModel = mongoose_1.default.model("users", usersSchema);

@@ -12,6 +12,7 @@ import { Alert } from "@material-ui/lab";
 
 import React, { ReactElement, useContext, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 
 import { loginUser } from "../services/services";
 
@@ -19,6 +20,7 @@ interface Props {}
 
 export default function Login({}: Props): ReactElement {
  const dispatch = useDispatch()
+ const history=useHistory()
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -34,17 +36,15 @@ export default function Login({}: Props): ReactElement {
   };
   const LoginUser = async (e: any) => {
     e.preventDefault();
-    const result:any = await loginUser(
-      {
-        username: user.username,
-        password: user.password,
-      },
-      dispatch
-    );
+    const result:any = await loginUser(user);
     console.log(result);
+    if(result.status!==200){
     setUser({ username: "", password: "" });
     let msg = result.status !== 200 ? result.response.data : "";
     setStatus({ code: result.status, message: msg });
+    }else{
+      history.push("/")
+    }
   };
 
   const useStyles = makeStyles((theme) => ({

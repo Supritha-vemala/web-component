@@ -12,4 +12,7 @@ router.post('/register', function (req, res) {
 router.post("/login", function (req, res) {
     users_controller_1.loginUser(req, res);
 });
+router.patch("/addBookmark/:imdbid", users_controller_1.checkAuthoraiztion, function (req, res) {
+    users_controller_1.addBookMark(req, res);
+});
 exports.default = router;

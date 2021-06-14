@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkAuthoraiztion = exports.registerUser = exports.loginUser = void 0;
+exports.addBookMark = exports.checkAuthoraiztion = exports.registerUser = exports.loginUser = void 0;
 var user_1 = require("../models/user");
 var bcrypt_1 = __importDefault(require("bcrypt"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -165,7 +165,7 @@ function checkAuthoraiztion(req, res, next) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 3, , 4]);
+                    _a.trys.push([0, 4, , 5]);
                     if (!(req.headers && req.headers.authorization)) return [3 /*break*/, 2];
                     token = req.headers.authorization;
                     decode = jsonwebtoken_1.default.verify(token, "" + process.env.JWT_SECRET);
@@ -200,15 +200,44 @@ function checkAuthoraiztion(req, res, next) {
                                 message: "Couldnt Sign In Try Again",
                             })];
                     }
-                    _a.label = 2;
-                case 2: return [3 /*break*/, 4];
-                case 3:
+                    return [3 /*break*/, 3];
+                case 2:
+                    res.status(404).send("no token sent");
+                    _a.label = 3;
+                case 3: return [3 /*break*/, 5];
+                case 4:
                     err_3 = _a.sent();
                     console.log("Error in Authorization ", err_3.message);
                     return [2 /*return*/, res.json({ success: false, message: "Invalid token" })];
-                case 4: return [2 /*return*/];
+                case 5: return [2 /*return*/];
             }
         });
     });
 }
 exports.checkAuthoraiztion = checkAuthoraiztion;
+var addBookMark = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var imdbid, result, err_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                imdbid = req.params.imdbid;
+                return [4 /*yield*/, user_1.usersModel.findOneAndUpdate({ _id: req.user._id, bookmarks: { $ne: imdbid } }, { $push: { bookmarks: imdbid } }, { new: true })];
+            case 1:
+                result = _a.sent();
+                if (result) {
+                    res.status(201).send(result);
+                }
+                else {
+                    res.status(200).send("bookmarked already");
+                }
+                return [3 /*break*/, 3];
+            case 2:
+                err_4 = _a.sent();
+                res.status(404).send(err_4.message);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.addBookMark = addBookMark;

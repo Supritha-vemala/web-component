@@ -1,8 +1,8 @@
 import {createStore,combineReducers} from "redux"
-import { userReducer } from "../reducers/reducers"
+import { movieReducer, userReducer } from "../reducers/reducers"
 
-const combinedReducer=combineReducers({user:userReducer})
+const combinedReducer=combineReducers({user:userReducer,movies:movieReducer})
 
-const store=createStore(combinedReducer )
+const store=createStore(combinedReducer)
 
 export {store}

@@ -100,6 +100,8 @@ async function loginUser(req: any, res: any) {
             message: "Couldnt Sign In Try Again",
           });
         }
+      }else{
+        res.status(404).send("no token sent")
       }
     } catch (err) {
       console.log("Error in Authorization ", err.message);
@@ -107,5 +109,17 @@ async function loginUser(req: any, res: any) {
     }
   }
   
-
-export { loginUser, registerUser ,checkAuthoraiztion};
+const addBookMark:any=async(req:any,res:any)=>{
+  try{
+    const imdbid=req.params.imdbid
+    const result=await usersModel.findOneAndUpdate({_id:req.user._id,bookmarks:{$ne:imdbid}},{$push:{bookmarks:imdbid}},{new:true})
+    if(result){
+      res.status(201).send(result)
+    }else{
+      res.status(200).send("bookmarked already")
+    }
+  }catch(err){
+    res.status(404).send(err.message)
+  }
+}
+export { loginUser, registerUser ,checkAuthoraiztion,addBookMark};

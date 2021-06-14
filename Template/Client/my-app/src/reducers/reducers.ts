@@ -1,6 +1,10 @@
-import { LOGGED_IN, LOGGED_OUT } from "../store/constants";
+import { ADD_BOOKMARK, LOGGED_IN, LOGGED_OUT, TOP_MOVIES} from "../store/constants";
 
-const initialStateOfUser = {
+interface initialStateOfUser{
+  activeUser: any,
+  userProfile:[],
+}
+const initialStateOfUser:initialStateOfUser = {
   activeUser: null,
   userProfile: [],
 };
@@ -16,9 +20,40 @@ const userReducer = (currentState = initialStateOfUser, action: any): any => {
         ...currentState,
         activeUser: null,
       };
+      case ADD_BOOKMARK:
+        currentState.activeUser.user.bookmarks.push(action.payload)
+        return {
+          ...currentState,
+          activeUser:{
+            ...currentState.activeUser,
+            user:{
+              ...currentState.activeUser.user,
+              bookmarks:currentState.activeUser.user.bookmarks
+            }
+          }
+        }
+        
     default:
       return currentState;
   }
 };
 
-export { userReducer };
+const initialStateOfMovies = {
+  topMovies: []
+};
+const movieReducer = (
+  currentState = initialStateOfMovies,
+  action: any
+): any => {
+  switch (action.type) {
+    case TOP_MOVIES:
+      return {
+        ...currentState,
+        topMovies: action.payload,
+      };
+    default:
+      return currentState;
+  }
+};
+
+export { userReducer, movieReducer };

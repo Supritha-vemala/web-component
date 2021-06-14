@@ -8,12 +8,14 @@ var cors_1 = __importDefault(require("cors"));
 var connection_1 = __importDefault(require("./models/connection"));
 var dotenv_1 = __importDefault(require("dotenv"));
 var users_route_1 = __importDefault(require("./routes/users-route"));
+var movie_route_1 = __importDefault(require("./routes/movie-route"));
 dotenv_1.default.config();
 var startServer = function () {
     var app = express_1.default();
     app.use(express_1.default.json());
     app.use(cors_1.default());
     app.use("/api/users", users_route_1.default);
+    app.use("/api/movies", movie_route_1.default);
     connection_1.default()
         .then(function () {
         console.log("Connected to database");

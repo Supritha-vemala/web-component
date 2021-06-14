@@ -3,7 +3,7 @@ import cors from "cors";
 import connectionToDB from "./models/connection";
 import env from "dotenv";
 import userRouter from "./routes/users-route";
-
+import movieRouter from "./routes/movie-route";
 env.config();
 
 const startServer = () => {
@@ -13,6 +13,7 @@ const startServer = () => {
 
   app.use(cors());
   app.use("/api/users", userRouter);
+  app.use("/api/movies", movieRouter);
   connectionToDB()
     .then(() => {
       console.log("Connected to database");
