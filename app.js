@@ -12,10 +12,15 @@ var movie_route_1 = __importDefault(require("./routes/movie-route"));
 dotenv_1.default.config();
 var startServer = function () {
     var app = express_1.default();
+    var path = __dirname + "/views";
+    app.use(express_1.default.static(path));
     app.use(express_1.default.json());
     app.use(cors_1.default());
     app.use("/api/users", users_route_1.default);
     app.use("/api/movies", movie_route_1.default);
+    app.get('/*', function (req, res) {
+        res.sendFile(path + "/index.html");
+    });
     connection_1.default()
         .then(function () {
         console.log("Connected to database");

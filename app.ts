@@ -8,12 +8,15 @@ env.config();
 
 const startServer = () => {
   const app = express();
-
+  const path = __dirname + "/views";
+  app.use(express.static(path));
   app.use(express.json());
-
   app.use(cors());
   app.use("/api/users", userRouter);
   app.use("/api/movies", movieRouter);
+  app.get('/*', function (req,res) {
+    res.sendFile(path + "/index.html");
+  });
   connectionToDB()
     .then(() => {
       console.log("Connected to database");
